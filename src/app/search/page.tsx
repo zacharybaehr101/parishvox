@@ -1,4 +1,5 @@
 import { fetchAllCathedrals, fetchAllParishes, fetchFilterOptions } from '@/lib/sheets';
+import Thumb from '../Thumb';
 
 export const revalidate = 21600;
 
@@ -79,6 +80,7 @@ export default async function SearchPage({
         <div className="grid">
           {cathResults.map((c) => (
             <a key={c.id} href={`/cathedral/${c.id}`} className="card">
+              <Thumb src={c.thumbnail} alt={`${c.cathedralName} homepage`} />
               <span className="badge">Cathedral</span>{' '}
               {c.audited && <span className="badge red">Full audit</span>}
               <h3 style={{ marginTop: '0.5rem' }}>{c.cathedralName}</h3>
@@ -88,6 +90,7 @@ export default async function SearchPage({
           ))}
           {parishResults.map((p) => (
             <a key={p.id} href={`/parish/${p.id}`} className="card">
+              <Thumb src={p.thumbnail} alt={`${p.parishName} homepage`} />
               <span className="badge">Parish</span>{' '}
               {p.audited && <span className="badge red">Audited</span>}
               <h3 style={{ marginTop: '0.5rem' }}>{p.parishName}</h3>
