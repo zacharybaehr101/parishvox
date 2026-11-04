@@ -1,3 +1,4 @@
+import Thumb from '../../Thumb';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { fetchParishBySlug, fetchPagesForInstitution } from '@/lib/sheets';
@@ -47,6 +48,8 @@ export default async function ParishPage({ params }: { params: { slug: string } 
             drawn from the national stratified sample, diocese by diocese.
           </div>
         )}
+
+        <Thumb src={p.thumbnail} alt={`${p.parishName} homepage`} wide />
 
         {p.highlightAsset && (
           <div className="card" style={{ marginBottom: '1rem' }}>
