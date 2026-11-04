@@ -1,3 +1,4 @@
+import Thumb from '../../Thumb';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { fetchCathedralBySlug, fetchPagesForInstitution } from '@/lib/sheets';
@@ -41,6 +42,8 @@ export default async function CathedralPage({ params }: { params: { slug: string
           )}
           {c.dimensions.platform_tier && <span><b>Platform:</b> {c.dimensions.platform_tier.split('—')[0].slice(0, 60)}</span>}
         </div>
+
+        <Thumb src={c.thumbnail} alt={`${c.cathedralName} homepage`} wide />
 
         {c.whatWeLove && (
           <div className="card" style={{ marginBottom: '1rem' }}>
