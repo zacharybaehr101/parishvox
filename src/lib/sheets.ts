@@ -68,6 +68,7 @@ function rowToCathedral(row: string[]): Cathedral {
   // renamed it content_freshness — same slot (index 35 of the dimension block).
   return {
     id: slugify(`${name} ${city}`),
+    thumbnail: `/thumbs/cathedrals/${slugify(`${name} ${city}`)}.jpg`,
     diocese: get(0),
     cathedralName: name,
     city,
@@ -132,6 +133,7 @@ function rowToParish(row: string[]): Parish {
   const name = get(1);
   return {
     id: slugify(`${name} ${get(2)} ${get(3)}`),
+    thumbnail: `/thumbs/parishes/${slugify(`${name} ${get(2)} ${get(3)}`)}.jpg`,
     diocese: get(0),
     parishName: name,
     city: get(2),
