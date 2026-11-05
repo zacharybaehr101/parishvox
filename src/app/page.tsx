@@ -1,3 +1,4 @@
+import Thumb from './Thumb';
 import { fetchAllCathedrals, fetchAllDioceses, fetchAllParishes } from '@/lib/sheets';
 import SubscribeForm from './SubscribeForm';
 
@@ -54,6 +55,7 @@ export default async function HomePage() {
           <div className="grid">
             {exemplars.map((c) => (
               <a key={c.id} href={`/cathedral/${c.id}`} className="card">
+                <Thumb src={c.thumbnail} alt={`${c.cathedralName} homepage`} />
                 <span className="badge">Cathedral audit</span>
                 <h3 style={{ marginTop: '0.5rem' }}>{c.cathedralName}</h3>
                 <div className="meta">{c.city}, {c.state} · {c.diocese}</div>

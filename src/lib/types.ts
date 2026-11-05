@@ -47,6 +47,7 @@ export interface Cathedral {
   city: string;
   state: string;
   websiteUrl: string;
+  thumbnail: string; // /thumbs/cathedrals/<slug>.jpg — rendered only when the file exists
   status: string;
   note: string;
   dimensions: CathedralDimensions;
@@ -76,6 +77,7 @@ export interface Parish {
   city: string;
   state: string;
   websiteUrl: string;
+  thumbnail: string; // /thumbs/parishes/<slug>.jpg — rendered only when the file exists
   audited: boolean;
   faqScore: string; // Gloriam newcomer-questions score, e.g. "3/7"
   highlightAsset: string;

@@ -1,3 +1,4 @@
+import Thumb from '../Thumb';
 import { fetchAllCathedrals, fetchAllParishes } from '@/lib/sheets';
 
 export const revalidate = 21600;
@@ -23,6 +24,7 @@ export default async function ExemplarsPage() {
         <div className="grid" style={{ marginBottom: '2rem' }}>
           {cathEx.map((c) => (
             <a key={c.id} href={`/cathedral/${c.id}`} className="card">
+              <Thumb src={c.thumbnail} alt={`${c.cathedralName} homepage`} />
               <h3>{c.cathedralName}</h3>
               <div className="meta">{c.city}, {c.state} · {c.diocese}</div>
               <p>{c.whatWeLove}</p>
@@ -36,6 +38,7 @@ export default async function ExemplarsPage() {
             <div className="grid">
               {parishEx.map((p) => (
                 <a key={p.id} href={`/parish/${p.id}`} className="card">
+                  <Thumb src={p.thumbnail} alt={`${p.parishName} homepage`} />
                   <h3>{p.parishName}</h3>
                   <div className="meta">{p.city}, {p.state} · {p.diocese}</div>
                   <p>{p.highlightAsset}</p>

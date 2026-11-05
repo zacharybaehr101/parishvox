@@ -1,4 +1,5 @@
 import { fetchAllCathedrals } from '@/lib/sheets';
+import Thumb from '../Thumb';
 
 export const revalidate = 21600;
 
@@ -29,6 +30,7 @@ export default async function CathedralsPage() {
             <div className="grid">
               {(byState.get(state) ?? []).map((c) => (
                 <a key={c.id} href={`/cathedral/${c.id}`} className="card">
+                  <Thumb src={c.thumbnail} alt={`${c.cathedralName} homepage`} />
                   <h3>{c.cathedralName}</h3>
                   <div className="meta">{c.city} · {c.diocese}</div>
                   {c.audited ? (
