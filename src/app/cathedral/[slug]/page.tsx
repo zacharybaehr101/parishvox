@@ -7,7 +7,7 @@ import type { Metadata } from 'next';
 import { fetchCathedralBySlug, fetchPagesForInstitution } from '@/lib/sheets';
 import { DIMENSION_SECTIONS, DIMENSION_LABELS } from '@/lib/types';
 
-export const revalidate = 21600;
+export const revalidate = 900;
 
 export async function generateMetadata({
   params,
