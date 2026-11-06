@@ -1,6 +1,7 @@
 import Thumb from '../../Thumb';
 import RichText from '../../RichText';
 import BorrowSidebar from '../../BorrowSidebar';
+import PageRows from '../../PageRows';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { fetchCathedralBySlug, fetchPagesForInstitution } from '@/lib/sheets';
@@ -29,6 +30,7 @@ export default async function CathedralPage({ params }: { params: { slug: string
   return (
     <section className="section">
       <div className="container">
+       <div className="panel">
         <span className="badge">Cathedral audit</span>{' '}
         <span className="badge red">{c.diocese}</span>
         <h1 style={{ fontSize: '2.4rem', marginTop: '0.75rem' }}>{c.cathedralName}</h1>
@@ -91,30 +93,13 @@ export default async function CathedralPage({ params }: { params: { slug: string
             <p style={{ marginBottom: '1rem' }}>
               The pillar pages a newcomer actually lands on — what each one says and how it invites.
             </p>
-            <div className="grid">
-              {pages.map((p, i) => (
-                <div key={i} className="card">
-                  <span className="badge">{p.pageType}</span>
-                  <h3 style={{ marginTop: '0.5rem' }}>
-                    {p.pageUrl ? (
-                      <a href={p.pageUrl} target="_blank" rel="noreferrer">{p.pageType}</a>
-                    ) : (
-                      p.pageType
-                    )}
-                  </h3>
-                  {p.primaryMessage && <p><b>Primary message:</b> {p.primaryMessage}</p>}
-                  {p.ctaLabels && <p><b>Calls to action:</b> {p.ctaLabels}</p>}
-                  {p.whatWeLove && <p><b>What we love:</b> {p.whatWeLove}</p>}
-                  {p.areasOfOpportunity && <p><b>Opportunity:</b> {p.areasOfOpportunity}</p>}
-                  {p.invitationNote && <p><b>Invitation note:</b> {p.invitationNote}</p>}
-                </div>
-              ))}
-            </div>
+            <PageRows pages={pages} />
           </div>
         )}
         </div>
         <BorrowSidebar fromName={c.cathedralName} loveText={c.whatWeLove || ''} gapText={c.areasOfOpportunity} />
         </div>
+       </div>
       </div>
     </section>
   );
