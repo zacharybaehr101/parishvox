@@ -6,7 +6,7 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { fetchParishBySlug, fetchPagesForInstitution } from '@/lib/sheets';
 
-export const revalidate = 21600;
+export const revalidate = 900;
 
 export async function generateMetadata({
   params,
