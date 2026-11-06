@@ -1,5 +1,6 @@
 import Thumb from '../../Thumb';
 import RichText from '../../RichText';
+import BorrowSidebar from '../../BorrowSidebar';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { fetchParishBySlug, fetchPagesForInstitution } from '@/lib/sheets';
@@ -52,6 +53,8 @@ export default async function ParishPage({ params }: { params: { slug: string } 
 
         <Thumb src={p.thumbnail} alt={`${p.parishName} homepage`} wide />
 
+        <div className="profile-layout">
+        <div>
         {p.highlightAsset && (
           <div className="card love" style={{ marginBottom: '1rem' }}>
             <h3>Standout asset</h3>
@@ -81,6 +84,9 @@ export default async function ParishPage({ params }: { params: { slug: string } 
             </div>
           </div>
         )}
+        </div>
+        <BorrowSidebar fromName={p.parishName} loveText={p.highlightAsset || ''} gapText={p.highlightOpportunity} />
+        </div>
       </div>
     </section>
   );

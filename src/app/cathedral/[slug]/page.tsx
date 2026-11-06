@@ -1,5 +1,6 @@
 import Thumb from '../../Thumb';
 import RichText from '../../RichText';
+import BorrowSidebar from '../../BorrowSidebar';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { fetchCathedralBySlug, fetchPagesForInstitution } from '@/lib/sheets';
@@ -46,6 +47,8 @@ export default async function CathedralPage({ params }: { params: { slug: string
 
         <Thumb src={c.thumbnail} alt={`${c.cathedralName} homepage`} wide />
 
+        <div className="profile-layout">
+        <div>
         {c.whatWeLove && (
           <div className="card love" style={{ marginBottom: '1rem' }}>
             <h3>What we love</h3>
@@ -109,6 +112,9 @@ export default async function CathedralPage({ params }: { params: { slug: string
             </div>
           </div>
         )}
+        </div>
+        <BorrowSidebar fromName={c.cathedralName} loveText={c.whatWeLove || ''} gapText={c.areasOfOpportunity} />
+        </div>
       </div>
     </section>
   );
