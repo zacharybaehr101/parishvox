@@ -115,8 +115,13 @@ a:hover { color: var(--red); }
   border-radius: var(--radius-lg);
   padding: 1.25rem;
   display: block;
+  box-shadow: 0 2px 10px rgba(26, 39, 68, 0.06);
 }
 .card:hover { border-color: var(--border); }
+.card.love { background: var(--navy-light); border-color: #c9d2e6; border-left: 6px solid var(--navy); }
+.card.love h3 { color: var(--navy); }
+.card.grow { background: var(--red-light); border-color: #e3c8c8; border-left: 6px solid var(--red); }
+.card.grow h3 { color: var(--red); }
 .card h3 { font-size: 1.15rem; margin-bottom: 0.25rem; }
 .card .meta { font-size: 0.8rem; color: var(--ink-light); }
 .card p { font-size: 0.9rem; margin-top: 0.5rem; }
@@ -154,9 +159,56 @@ a:hover { color: var(--red); }
 }
 .searchbar input { flex: 1 1 260px; }
 
-.dim { border-top: 1px solid var(--border-light); padding: 1rem 0; }
-.dim h4 { margin-bottom: 0.25rem; }
-.dim p { font-size: 0.92rem; white-space: pre-wrap; }
+.dim-section { margin-top: 2.5rem; }
+.dim-section > h2 {
+  background: var(--navy);
+  color: #fff;
+  font-size: 1.35rem;
+  padding: 0.65rem 1.1rem;
+  border-radius: var(--radius);
+  border-left: 8px solid var(--red);
+  margin-bottom: 1rem;
+}
+.dim {
+  background: var(--white);
+  border: 1px solid var(--border-light);
+  border-left: 5px solid var(--navy-mid);
+  border-radius: var(--radius-lg);
+  padding: 1rem 1.25rem;
+  margin-bottom: 0.85rem;
+  box-shadow: 0 2px 8px rgba(26, 39, 68, 0.05);
+}
+.dim h4 {
+  margin-bottom: 0.4rem;
+  color: var(--navy);
+  font-size: 0.8rem;
+  font-family: var(--font-body);
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+.dim p { font-size: 0.94rem; }
+
+.points { list-style: none; }
+.points li {
+  font-size: 0.94rem;
+  color: var(--ink-mid);
+  line-height: 1.7;
+  padding-left: 1.15rem;
+  position: relative;
+  margin-bottom: 0.45rem;
+}
+.points li:last-child { margin-bottom: 0; }
+.points li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 7px;
+  height: 7px;
+  background: var(--red);
+  transform: rotate(45deg);
+}
 
 .kv { display: flex; gap: 0.5rem; flex-wrap: wrap; font-size: 0.85rem; color: var(--ink-mid); }
 .kv b { color: var(--ink); }
