@@ -1,4 +1,5 @@
 import Thumb from '../../Thumb';
+import RichText from '../../RichText';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { fetchCathedralBySlug, fetchPagesForInstitution } from '@/lib/sheets';
@@ -46,15 +47,15 @@ export default async function CathedralPage({ params }: { params: { slug: string
         <Thumb src={c.thumbnail} alt={`${c.cathedralName} homepage`} wide />
 
         {c.whatWeLove && (
-          <div className="card" style={{ marginBottom: '1rem' }}>
+          <div className="card love" style={{ marginBottom: '1rem' }}>
             <h3>What we love</h3>
-            <p style={{ whiteSpace: 'pre-wrap' }}>{c.whatWeLove}</p>
+            <RichText text={c.whatWeLove} />
           </div>
         )}
         {c.areasOfOpportunity && (
-          <div className="card" style={{ marginBottom: '1rem' }}>
+          <div className="card grow" style={{ marginBottom: '1rem' }}>
             <h3>Where it can grow</h3>
-            <p style={{ whiteSpace: 'pre-wrap' }}>{c.areasOfOpportunity}</p>
+            <RichText text={c.areasOfOpportunity} />
           </div>
         )}
 
@@ -69,12 +70,12 @@ export default async function CathedralPage({ params }: { params: { slug: string
           const filled = section.keys.filter((k) => c.dimensions[k]);
           if (!filled.length) return null;
           return (
-            <div key={section.title} style={{ marginTop: '2rem' }}>
-              <h2 style={{ fontSize: '1.5rem' }}>{section.title}</h2>
+            <div key={section.title} className="dim-section">
+              <h2>{section.title}</h2>
               {filled.map((k) => (
                 <div key={k} className="dim">
                   <h4>{DIMENSION_LABELS[k]}</h4>
-                  <p>{c.dimensions[k]}</p>
+                  <RichText text={c.dimensions[k]} />
                 </div>
               ))}
             </div>

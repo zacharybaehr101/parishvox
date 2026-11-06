@@ -1,4 +1,5 @@
 import Thumb from '../../Thumb';
+import RichText from '../../RichText';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { fetchParishBySlug, fetchPagesForInstitution } from '@/lib/sheets';
@@ -52,15 +53,15 @@ export default async function ParishPage({ params }: { params: { slug: string } 
         <Thumb src={p.thumbnail} alt={`${p.parishName} homepage`} wide />
 
         {p.highlightAsset && (
-          <div className="card" style={{ marginBottom: '1rem' }}>
+          <div className="card love" style={{ marginBottom: '1rem' }}>
             <h3>Standout asset</h3>
-            <p style={{ whiteSpace: 'pre-wrap' }}>{p.highlightAsset}</p>
+            <RichText text={p.highlightAsset} />
           </div>
         )}
         {p.highlightOpportunity && (
-          <div className="card" style={{ marginBottom: '1rem' }}>
+          <div className="card grow" style={{ marginBottom: '1rem' }}>
             <h3>Best opportunity</h3>
-            <p style={{ whiteSpace: 'pre-wrap' }}>{p.highlightOpportunity}</p>
+            <RichText text={p.highlightOpportunity} />
           </div>
         )}
 
