@@ -9,7 +9,7 @@ const TAB_PAGES = process.env.SHEET_TAB_PAGES ?? 'Pages';
 const TAB_PARISHES = process.env.SHEET_TAB_PARISHES ?? 'Parishes';
 const TAB_DIOCESES = process.env.SHEET_TAB_DIOCESES ?? 'Dioceses';
 
-export const CACHE_REVALIDATE_SECONDS = 21600; // 6 hours, same as CampusVox
+export const CACHE_REVALIDATE_SECONDS = 900; // 15 minutes so sheet pushes propagate quickly
 
 const sheetsConfigured = Boolean(SHEET_ID && API_KEY);
 

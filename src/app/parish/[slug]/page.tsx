@@ -1,11 +1,12 @@
 import Thumb from '../../Thumb';
 import RichText from '../../RichText';
 import BorrowSidebar from '../../BorrowSidebar';
+import PageRows from '../../PageRows';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { fetchParishBySlug, fetchPagesForInstitution } from '@/lib/sheets';
 
-export const revalidate = 21600;
+export const revalidate = 900;
 
 export async function generateMetadata({
   params,
@@ -28,6 +29,7 @@ export default async function ParishPage({ params }: { params: { slug: string } 
   return (
     <section className="section">
       <div className="container">
+       <div className="panel">
         <span className="badge">Parish</span>{' '}
         <span className="badge red">{p.diocese}</span>
         <h1 style={{ fontSize: '2.4rem', marginTop: '0.75rem' }}>{p.parishName}</h1>
@@ -70,23 +72,14 @@ export default async function ParishPage({ params }: { params: { slug: string } 
 
         {pages.length > 0 && (
           <div style={{ marginTop: '2rem' }}>
-            <h2 style={{ fontSize: '1.5rem' }}>Key pages, up close</h2>
-            <div className="grid" style={{ marginTop: '1rem' }}>
-              {pages.map((pg, i) => (
-                <div key={i} className="card">
-                  <span className="badge">{pg.pageType}</span>
-                  {pg.primaryMessage && <p><b>Primary message:</b> {pg.primaryMessage}</p>}
-                  {pg.ctaLabels && <p><b>Calls to action:</b> {pg.ctaLabels}</p>}
-                  {pg.whatWeLove && <p><b>What we love:</b> {pg.whatWeLove}</p>}
-                  {pg.areasOfOpportunity && <p><b>Opportunity:</b> {pg.areasOfOpportunity}</p>}
-                </div>
-              ))}
-            </div>
+            <h2 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>Key pages, up close</h2>
+            <PageRows pages={pages} />
           </div>
         )}
         </div>
         <BorrowSidebar fromName={p.parishName} loveText={p.highlightAsset || ''} gapText={p.highlightOpportunity} />
         </div>
+       </div>
       </div>
     </section>
   );
