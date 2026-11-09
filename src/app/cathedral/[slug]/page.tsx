@@ -2,6 +2,7 @@ import Thumb from '../../Thumb';
 import RichText from '../../RichText';
 import BorrowSidebar from '../../BorrowSidebar';
 import PageRows from '../../PageRows';
+import { solutionForText } from '@/lib/solutions';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { fetchCathedralBySlug, fetchPagesForInstitution } from '@/lib/sheets';
@@ -61,6 +62,16 @@ export default async function CathedralPage({ params }: { params: { slug: string
           <div className="card grow" style={{ marginBottom: '1rem' }}>
             <h3>Where it can grow</h3>
             <RichText text={c.areasOfOpportunity} />
+            {(() => {
+              const sol = solutionForText(c.areasOfOpportunity || '');
+              return sol ? (
+                <p style={{ marginTop: '0.6rem' }}>
+                  <a className="page-link" href={`/solutions/${sol.slug}`}>
+                    Learn more: {sol.title} →
+                  </a>
+                </p>
+              ) : null;
+            })()}
           </div>
         )}
 

@@ -1,3 +1,5 @@
+import { solutionForText } from '@/lib/solutions';
+
 // "Things to borrow" sidebar for profile pages.
 // Built from the audit's own highlight text: each numbered/pipe-separated point
 // in the "what we love" field becomes one borrowable practice (short lead line +
@@ -58,6 +60,14 @@ export default function BorrowSidebar({
         <div className="borrow-item gap">
           <div className="borrow-lead">The gap to close</div>
           <p>{gap.lead}{gap.summary ? ` — ${gap.summary}` : ''}</p>
+          {(() => {
+            const sol = solutionForText(gapText || '');
+            return sol ? (
+              <a className="page-link" href={`/solutions/${sol.slug}`}>
+                Learn more: {sol.title} →
+              </a>
+            ) : null;
+          })()}
         </div>
       )}
       <a className="borrow-more" href="/exemplars">More patterns in the Playbook →</a>

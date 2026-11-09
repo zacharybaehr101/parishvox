@@ -100,6 +100,7 @@ function SiteHeader() {
           <a href="/cathedrals" style={link}>Cathedrals</a>
           <a href="/dioceses" style={link}>Dioceses</a>
           <a href="/exemplars" style={link}>Exemplars</a>
+          <a href="/solutions" style={link}>Solutions</a>
           <a href="/pricing" style={link}>Pricing</a>
         </nav>
       </div>
@@ -128,6 +129,7 @@ function SiteFooter() {
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
             <a href="/exemplars">Exemplars</a>
+            <a href="/solutions">Solutions</a>
             <a href="/pricing">Pricing</a>
           </div>
         </nav>
