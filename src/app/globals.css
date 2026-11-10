@@ -456,3 +456,11 @@ footer a { color: var(--parchment-dark); }
 }
 .list-row.done { opacity: 0.65; }
 .list-row .grow { flex: 1 1 auto; min-width: 0; }
+
+/* Newcomer FAQ score: link + hover/focus pop-up explaining the Gloriam 0–7 */
+.faq-score-wrap { position: relative; }
+.faq-score-link { color: var(--red, #8b2020); font-weight: 600; text-decoration: none; white-space: nowrap; }
+.faq-score-link:hover { text-decoration: underline; }
+.faq-q { display: inline-flex; align-items: center; justify-content: center; width: 1.05em; height: 1.05em; border-radius: 50%; background: var(--navy, #1a2744); color: #fff; font-size: 0.72em; font-weight: 700; vertical-align: 0.18em; }
+.faq-tip { position: absolute; left: 0; top: calc(100% + 0.45rem); z-index: 40; width: min(21rem, 80vw); background: #fff; color: #22242a; border: 1px solid #d8d2c2; border-left: 3px solid var(--red, #8b2020); border-radius: 8px; box-shadow: 0 10px 30px rgba(26, 39, 68, 0.18); padding: 0.65rem 0.8rem; font-size: 0.82rem; line-height: 1.45; white-space: normal; opacity: 0; visibility: hidden; transform: translateY(-3px); transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s; pointer-events: none; }
+.faq-score-wrap:hover .faq-tip, .faq-score-wrap:focus-within .faq-tip { opacity: 1; visibility: visible; transform: translateY(0); }

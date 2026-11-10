@@ -63,7 +63,18 @@ export default function ProfileShell({
                   </span>
                 )}
                 {head.faqScore && (
-                  <span><b>Newcomer FAQ score:</b> {head.faqScore} (Gloriam 0–7)</span>
+                  <span className="faq-score-wrap">
+                    <b>Newcomer FAQ score:</b>{' '}
+                    <a href="/faq-score" className="faq-score-link">
+                      {head.faqScore} (Gloriam 0–7) <span className="faq-q" aria-hidden="true">?</span>
+                    </a>
+                    <span className="faq-tip" role="tooltip">
+                      How many of the seven questions a first-time visitor actually asks —
+                      bathrooms and changing tables, what to wear, who to ask for help, how to
+                      become Catholic, children at Mass, not knowing what to do, and Communion —
+                      this site answers clearly. Click for the full explanation.
+                    </span>
+                  </span>
                 )}
               </div>
             </div>
