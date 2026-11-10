@@ -112,6 +112,7 @@ function SiteHeader() {
           <a href="/exemplars" style={link}>Exemplars</a>
           <a href="/solutions" style={link}>Solutions</a>
           <a href="/pricing" style={link}>Pricing</a>
+          <a href="/about" style={link}>About</a>
           <AuthControls linkStyle={link} />
         </nav>
       </div>
@@ -179,6 +180,7 @@ function SiteFooter() {
             <a href="/exemplars">Exemplars</a>
             <a href="/solutions">Solutions</a>
             <a href="/pricing">Pricing</a>
+            <a href="/about">About</a>
           </div>
         </nav>
       </div>
