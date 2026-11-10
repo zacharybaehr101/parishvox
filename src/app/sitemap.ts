@@ -7,7 +7,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = process.env.NEXT_PUBLIC_APP_URL || 'https://getparishvox.com';
   const [cathedrals, parishes] = await Promise.all([fetchAllCathedrals(), fetchAllParishes()]);
   const staticPages: MetadataRoute.Sitemap = [
-    '', '/search', '/cathedrals', '/dioceses', '/exemplars', '/pricing',
+    '', '/search', '/cathedrals', '/dioceses', '/exemplars', '/pricing', '/about', '/faq-score', '/solutions',
   ].map((path) => ({ url: `${base}${path}`, changeFrequency: 'weekly', priority: path === '' ? 1 : 0.7 }));
   return [
     ...staticPages,
