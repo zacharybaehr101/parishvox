@@ -1,14 +1,15 @@
-import Thumb from '../../Thumb';
 import RichText from '../../RichText';
-import BorrowSidebar from '../../BorrowSidebar';
-import PageRows from '../../PageRows';
+import ProfileShell, { LockScreen, VendorCreditLine } from '../../profile/ProfileHeader';
+import BorrowSection from '../../profile/BorrowSection';
+import { AuditRequestForm } from '../../profile/ProfileBits';
 import { solutionForText } from '@/lib/solutions';
+import { borrowItems } from '@/lib/borrow';
+import { getServerAccess, hasFullAccess } from '@/lib/access';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import { fetchCathedralBySlug, fetchPagesForInstitution } from '@/lib/sheets';
-import { DIMENSION_SECTIONS, DIMENSION_LABELS } from '@/lib/types';
+import { fetchCathedralBySlug } from '@/lib/sheets';
 
-export const revalidate = 900;
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({
   params,
@@ -26,92 +27,87 @@ export async function generateMetadata({
 export default async function CathedralPage({ params }: { params: { slug: string } }) {
   const c = await fetchCathedralBySlug(params.slug);
   if (!c) notFound();
-  const pages = await fetchPagesForInstitution(c.cathedralName);
+  const access = await getServerAccess();
+  const full = hasFullAccess(access, { kind: 'cathedral', slug: c.id, diocese: c.diocese });
+  const faq = c.dimensions.faq_page?.match(/\d\s*\/\s*7/)?.[0]?.replace(/\s/g, '');
+  const head = {
+    kind: 'cathedral' as const,
+    slug: c.id,
+    name: c.cathedralName,
+    diocese: c.diocese,
+    city: c.city,
+    state: c.state,
+    websiteUrl: c.websiteUrl,
+    faqScore: faq,
+    thumbnail: c.thumbnail,
+    active: 'overview' as const,
+  };
 
-  return (
-    <section className="section">
-      <div className="container">
-       <div className="panel">
-        <span className="badge">Cathedral audit</span>{' '}
-        <span className="badge red">{c.diocese}</span>
-        <h1 style={{ fontSize: '2.4rem', marginTop: '0.75rem' }}>{c.cathedralName}</h1>
-        <div className="kv" style={{ margin: '0.5rem 0 1rem' }}>
-          <span><b>City:</b> {c.city}, {c.state}</span>
-          {c.websiteUrl && (
-            <span>
-              <b>Website:</b>{' '}
-              <a href={c.websiteUrl} target="_blank" rel="noreferrer">
-                {c.websiteUrl.replace(/^https?:\/\//, '').replace(/\/$/, '')}
-              </a>
-            </span>
-          )}
-          {c.dimensions.platform_tier && <span><b>Platform:</b> {c.dimensions.platform_tier.split('—')[0].slice(0, 60)}</span>}
-        </div>
-
-        <Thumb src={c.thumbnail} alt={`${c.cathedralName} homepage`} wide />
-
-        <div className="profile-layout">
-        <div>
-        {c.whatWeLove && (
-          <div className="card love" style={{ marginBottom: '1rem' }}>
-            <h3>What we love</h3>
-            <RichText text={c.whatWeLove} />
-          </div>
-        )}
-        {c.areasOfOpportunity && (
-          <div className="card grow" style={{ marginBottom: '1rem' }}>
-            <h3>Where it can grow</h3>
-            <RichText text={c.areasOfOpportunity} />
-            {(() => {
-              const sol = solutionForText(c.areasOfOpportunity || '');
-              return sol ? (
-                <p style={{ marginTop: '0.6rem' }}>
-                  <a className="page-link" href={`/solutions/${sol.slug}`}>
-                    Learn more: {sol.title} →
-                  </a>
-                </p>
-              ) : null;
-            })()}
-          </div>
-        )}
-
+  if (!full) {
+    const first = borrowItems(c.whatWeLove || '').borrows[0];
+    return (
+      <ProfileShell head={head}>
         {!c.audited && (
           <div className="note">
-            This cathedral is in the ParishVox index; its full 42-dimension audit is being
-            prepared. The cathedral audits roll out diocese by diocese.
+            This cathedral is in the ParishVox index; its full audit is being prepared.
+            The cathedral audits roll out diocese by diocese.
           </div>
         )}
-
-        {DIMENSION_SECTIONS.map((section) => {
-          const filled = section.keys.filter((k) => c.dimensions[k]);
-          if (!filled.length) return null;
-          return (
-            <div key={section.title} className="dim-section">
-              <h2>{section.title}</h2>
-              {filled.map((k) => (
-                <div key={k} className="dim">
-                  <h4>{DIMENSION_LABELS[k]}</h4>
-                  <RichText text={c.dimensions[k]} />
-                </div>
-              ))}
+        {first && (
+          <div className="borrow-flow">
+            <h2>Things to borrow</h2>
+            <p className="borrow-sub">One practice from {c.cathedralName} worth copying — the full list is inside.</p>
+            <div className="borrow-item">
+              <div className="borrow-lead">{first.lead}</div>
+              {first.summary && <p>{first.summary}</p>}
             </div>
-          );
-        })}
-
-        {pages.length > 0 && (
-          <div style={{ marginTop: '2.5rem' }}>
-            <h2 style={{ fontSize: '1.5rem' }}>Key pages, up close</h2>
-            <p style={{ marginBottom: '1rem' }}>
-              The pillar pages a newcomer actually lands on — what each one says and how it invites.
-            </p>
-            <PageRows pages={pages} />
           </div>
         )}
+        <LockScreen signedIn={access.signedIn} name={c.cathedralName} />
+        <VendorCreditLine slug={c.id} />
+      </ProfileShell>
+    );
+  }
+
+  return (
+    <ProfileShell head={head}>
+      {!c.audited && (
+        <div className="note" style={{ marginBottom: '1rem' }}>
+          This cathedral is in the ParishVox index; its full 42-dimension audit is being
+          prepared. The cathedral audits roll out diocese by diocese.
         </div>
-        <BorrowSidebar fromName={c.cathedralName} loveText={c.whatWeLove || ''} gapText={c.areasOfOpportunity} />
+      )}
+      {c.whatWeLove && (
+        <div className="card love" style={{ marginBottom: '1rem' }}>
+          <h3>What we love</h3>
+          <RichText text={c.whatWeLove} />
         </div>
-       </div>
-      </div>
-    </section>
+      )}
+      {c.areasOfOpportunity && (
+        <div className="card grow" style={{ marginBottom: '1rem' }}>
+          <h3>Where it can grow</h3>
+          <RichText text={c.areasOfOpportunity} />
+          {(() => {
+            const sol = solutionForText(c.areasOfOpportunity || '');
+            return sol ? (
+              <p style={{ marginTop: '0.6rem' }}>
+                <a className="page-link" href={`/solutions/${sol.slug}`}>
+                  Learn more: {sol.title} →
+                </a>
+              </p>
+            ) : null;
+          })()}
+        </div>
+      )}
+      <BorrowSection
+        fromName={c.cathedralName}
+        slug={c.id}
+        kind="cathedral"
+        loveText={c.whatWeLove || ''}
+        gapText={c.areasOfOpportunity}
+      />
+      <AuditRequestForm slug={c.id} name={c.cathedralName} websiteUrl={c.websiteUrl} />
+      <VendorCreditLine slug={c.id} />
+    </ProfileShell>
   );
 }
