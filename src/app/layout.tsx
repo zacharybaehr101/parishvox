@@ -1,4 +1,12 @@
 import type { Metadata } from 'next';
+import {
+  ClerkProvider,
+  SignInButton,
+  SignUpButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from '@clerk/nextjs';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -51,9 +59,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         )}
       </head>
       <body>
-        <SiteHeader />
-        <main>{children}</main>
-        <SiteFooter />
+        <ClerkProvider signInUrl="/sign-in" signUpUrl="/sign-up">
+          <SiteHeader />
+          <main>{children}</main>
+          <SiteFooter />
+        </ClerkProvider>
       </body>
     </html>
   );
@@ -102,9 +112,45 @@ function SiteHeader() {
           <a href="/exemplars" style={link}>Exemplars</a>
           <a href="/solutions" style={link}>Solutions</a>
           <a href="/pricing" style={link}>Pricing</a>
+          <AuthControls linkStyle={link} />
         </nav>
       </div>
     </header>
+  );
+}
+
+function AuthControls({ linkStyle }: { linkStyle: React.CSSProperties }) {
+  const signUpStyle: React.CSSProperties = {
+    ...linkStyle,
+    background: 'var(--red)',
+    color: '#fff',
+    border: 'none',
+    cursor: 'pointer',
+    fontFamily: 'inherit',
+    marginLeft: '6px',
+  };
+  const signInStyle: React.CSSProperties = {
+    ...linkStyle,
+    background: 'none',
+    border: 'none',
+    cursor: 'pointer',
+    fontFamily: 'inherit',
+  };
+
+  return (
+    <span style={{ display: 'inline-flex', alignItems: 'center', marginLeft: '6px' }}>
+      <SignedOut>
+        <SignInButton>
+          <button type="button" style={signInStyle}>Sign in</button>
+        </SignInButton>
+        <SignUpButton>
+          <button type="button" style={signUpStyle}>Sign up</button>
+        </SignUpButton>
+      </SignedOut>
+      <SignedIn>
+        <UserButton afterSignOutUrl="/" />
+      </SignedIn>
+    </span>
   );
 }
 
