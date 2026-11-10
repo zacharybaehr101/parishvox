@@ -5,7 +5,7 @@ import { useState } from 'react';
 /** Homepage thumbnail. Files live in /public/thumbs/... — when a slug has no
  *  capture yet the <img> errors and the component renders nothing, so cards
  *  and profiles simply stay text-only until the capture lands. */
-export default function Thumb({ src, alt, wide = false }: { src: string; alt: string; wide?: boolean }) {
+export default function Thumb({ src, alt, wide = false, small = false }: { src: string; alt: string; wide?: boolean; small?: boolean }) {
   const [ok, setOk] = useState(true);
   if (!ok) return null;
   return (
@@ -15,7 +15,7 @@ export default function Thumb({ src, alt, wide = false }: { src: string; alt: st
       alt={alt}
       loading="lazy"
       onError={() => setOk(false)}
-      className={wide ? 'thumb wide' : 'thumb'}
+      className={small ? 'thumb small' : wide ? 'thumb wide' : 'thumb'}
     />
   );
 }
