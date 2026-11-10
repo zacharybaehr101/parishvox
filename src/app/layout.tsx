@@ -59,6 +59,40 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         )}
       </head>
       <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@graph': [
+                {
+                  '@type': 'Organization',
+                  '@id': 'https://parishvox.vercel.app/#org',
+                  name: 'ParishVox',
+                  url: 'https://parishvox.vercel.app/',
+                  description:
+                    'Digital content analysis for Catholic parishes and cathedrals: audits of parish websites, what they publish, how they welcome newcomers, and what other parishes can borrow from them.',
+                  slogan: 'A human project, with AI in its proper place',
+                },
+                {
+                  '@type': 'WebSite',
+                  '@id': 'https://parishvox.vercel.app/#site',
+                  url: 'https://parishvox.vercel.app/',
+                  name: 'ParishVox',
+                  publisher: { '@id': 'https://parishvox.vercel.app/#org' },
+                  potentialAction: {
+                    '@type': 'SearchAction',
+                    target: {
+                      '@type': 'EntryPoint',
+                      urlTemplate: 'https://parishvox.vercel.app/search?q={search_term_string}',
+                    },
+                    'query-input': 'required name=search_term_string',
+                  },
+                },
+              ],
+            }),
+          }}
+        />
         <ClerkProvider signInUrl="/sign-in" signUpUrl="/sign-up">
           <SiteHeader />
           <main>{children}</main>
