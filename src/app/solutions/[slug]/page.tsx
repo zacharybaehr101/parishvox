@@ -10,7 +10,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const s = SOLUTIONS.find((x) => x.slug === slug);
-  return { title: s ? `${s.title} — ParishVox Solutions` : 'Solutions — ParishVox' };
+  return { title: s ? `${s.title} — Solutions` : 'Solutions' };
 }
 
 export default async function SolutionPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -21,6 +21,21 @@ export default async function SolutionPage({ params }: { params: Promise<{ slug:
 
   return (
     <section className="section">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Article',
+            headline: s.title,
+            description: s.promise,
+            author: { '@type': 'Organization', name: 'ParishVox', url: 'https://parishvox.vercel.app/' },
+            publisher: { '@type': 'Organization', name: 'ParishVox', url: 'https://parishvox.vercel.app/' },
+            mainEntityOfPage: `https://parishvox.vercel.app/solutions/${s.slug}`,
+            articleSection: `Parish website solutions — ${s.verb}`,
+          }),
+        }}
+      />
       <div className="container">
         <div className="panel">
           <span className="badge">{s.verb}</span>{' '}

@@ -20,6 +20,20 @@ const QUESTIONS = [
 export default function FaqScorePage() {
   return (
     <section className="section">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            mainEntity: QUESTIONS.map(([q, why]) => ({
+              '@type': 'Question',
+              name: q,
+              acceptedAnswer: { '@type': 'Answer', text: why },
+            })),
+          }),
+        }}
+      />
       <div className="container">
         <div className="panel">
           <span className="badge">Reading a profile</span>

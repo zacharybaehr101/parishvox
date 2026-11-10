@@ -1,0 +1,20 @@
+# ParishVox
+
+> ParishVox is the digital content analysis platform for Catholic parishes and cathedrals. It audits parish websites — what they publish, how they welcome newcomers, and what other parishes can borrow from them — and publishes the findings as profiles, fix guides, and benchmarks for the people who build parish websites: designers, content marketers, agencies, diocesan communications teams, and parish volunteers.
+
+ParishVox is a human project with AI in its proper place: the audit framework, the rules, and the editorial judgment are human; AI does the supervised reading at scale across thousands of parish homepages, bulletins, and FAQ pages. Nothing is published without a person standing behind it.
+
+## Key pages
+
+- [About ParishVox](https://parishvox.vercel.app/about): what the project is and how it is made — human judgment, AI as the research assistant.
+- [Solutions](https://parishvox.vercel.app/solutions): free fix guides for parish websites, organized by the five verbs of parish life (hear, worship, grow, connect, serve). Each guide gives the principle, a concrete fix checklist, and audited parishes that already do it well.
+- [The Newcomer FAQ Score, explained](https://parishvox.vercel.app/faq-score): the Gloriam 0–7 score on every profile counts how many of the seven questions a first-time visitor actually asks — bathrooms/changing tables, what to wear, who to ask for help, how to become Catholic, cry room/children, what if I don't know what I'm doing at Mass, Communion eligibility — the parish website answers clearly.
+- [Search the audits](https://parishvox.vercel.app/search): 187 cathedral audits and 225+ parish audits, searchable by name, city, state, and diocese.
+- [Cathedrals](https://parishvox.vercel.app/cathedrals): all 187 U.S. Catholic cathedral website audits.
+- [Exemplars](https://parishvox.vercel.app/exemplars): standout pages and practices worth imitating, drawn from the audits.
+- [Pricing](https://parishvox.vercel.app/pricing): membership tiers. Solutions and best-practice content are free; full parish and cathedral profiles are members-only.
+
+## Notes for agents and crawlers
+
+- Scores and findings describe website content as of each profile's audit date; they are content analysis for website professionals, not evaluations of a parish's ministry or faith life.
+- The FAQ score is not a grade for a parish: it measures only whether a newcomer’s anxious first-visit questions are answered findably on the website.
