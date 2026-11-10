@@ -148,6 +148,8 @@ function AuthControls({ linkStyle }: { linkStyle: React.CSSProperties }) {
         </SignUpButton>
       </SignedOut>
       <SignedIn>
+        <a href="/favorites" style={linkStyle}>Favorites</a>
+        <a href="/to-do" style={linkStyle}>To-Do</a>
         <UserButton afterSignOutUrl="/" />
       </SignedIn>
     </span>

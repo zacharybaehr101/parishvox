@@ -1,10 +1,17 @@
 import type { PageTeardown } from '@/lib/types';
+import { AddTodoButton } from './profile/ProfileBits';
 
 // Key-pages layout: full-width rows with a labeled left rail instead of a card
 // grid — page type on the rail, the page's message up top, calls to action as
 // chips, "what we love" and "opportunity" side by side, invitation note as a
 // closing line. Same content as before, easier to scan.
-export default function PageRows({ pages }: { pages: PageTeardown[] }) {
+export default function PageRows({
+  pages,
+  todoSource,
+}: {
+  pages: PageTeardown[];
+  todoSource?: { slug: string; name: string; kind?: 'parish' | 'cathedral' };
+}) {
   return (
     <div className="page-rows">
       {pages.map((p, i) => (
@@ -44,6 +51,17 @@ export default function PageRows({ pages }: { pages: PageTeardown[] }) {
               <a className="page-link" href={p.pageUrl} target="_blank" rel="noreferrer">
                 Visit the page →
               </a>
+            )}
+            {todoSource && p.whatWeLove && (
+              <div style={{ marginTop: '0.6rem' }}>
+                <AddTodoButton
+                  text={`${p.pageType}: ${p.whatWeLove}`}
+                  sourceSlug={todoSource.slug}
+                  sourceName={todoSource.name}
+                  sourceKind={todoSource.kind}
+                  label="💡 Add this page idea to my To-Do list"
+                />
+              </div>
             )}
           </div>
         </div>

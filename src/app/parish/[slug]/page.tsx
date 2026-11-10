@@ -1,13 +1,15 @@
-import Thumb from '../../Thumb';
 import RichText from '../../RichText';
-import BorrowSidebar from '../../BorrowSidebar';
-import PageRows from '../../PageRows';
+import ProfileShell, { LockScreen, VendorCreditLine } from '../../profile/ProfileHeader';
+import BorrowSection from '../../profile/BorrowSection';
+import { AuditRequestForm } from '../../profile/ProfileBits';
 import { solutionForText } from '@/lib/solutions';
+import { borrowItems } from '@/lib/borrow';
+import { getServerAccess, hasFullAccess } from '@/lib/access';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import { fetchParishBySlug, fetchPagesForInstitution } from '@/lib/sheets';
+import { fetchParishBySlug } from '@/lib/sheets';
 
-export const revalidate = 900;
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({
   params,
@@ -25,73 +27,86 @@ export async function generateMetadata({
 export default async function ParishPage({ params }: { params: { slug: string } }) {
   const p = await fetchParishBySlug(params.slug);
   if (!p) notFound();
-  const pages = await fetchPagesForInstitution(p.parishName);
+  const access = await getServerAccess();
+  const full = hasFullAccess(access, { kind: 'parish', slug: p.id, diocese: p.diocese });
+  const head = {
+    kind: 'parish' as const,
+    slug: p.id,
+    name: p.parishName,
+    diocese: p.diocese,
+    city: p.city,
+    state: p.state,
+    websiteUrl: p.websiteUrl,
+    faqScore: p.faqScore,
+    thumbnail: p.thumbnail,
+    active: 'overview' as const,
+  };
 
-  return (
-    <section className="section">
-      <div className="container">
-       <div className="panel">
-        <span className="badge">Parish</span>{' '}
-        <span className="badge red">{p.diocese}</span>
-        <h1 style={{ fontSize: '2.4rem', marginTop: '0.75rem' }}>{p.parishName}</h1>
-        <div className="kv" style={{ margin: '0.5rem 0 1rem' }}>
-          <span><b>City:</b> {p.city}, {p.state}</span>
-          {p.websiteUrl && (
-            <span>
-              <b>Website:</b>{' '}
-              <a href={p.websiteUrl} target="_blank" rel="noreferrer">
-                {p.websiteUrl.replace(/^https?:\/\//, '').replace(/\/$/, '')}
-              </a>
-            </span>
-          )}
-          {p.faqScore && <span><b>Newcomer FAQ score:</b> {p.faqScore} (Gloriam 0–7)</span>}
-        </div>
-
+  if (!full) {
+    // Teaser: identity + FAQ score (in the header) + the first borrow item.
+    const first = borrowItems(p.highlightAsset || '').borrows[0];
+    return (
+      <ProfileShell head={head}>
         {!p.audited && (
           <div className="note">
             This parish is in the ParishVox roster with a verified website. Full audits are
             drawn from the national stratified sample, diocese by diocese.
           </div>
         )}
-
-        <Thumb src={p.thumbnail} alt={`${p.parishName} homepage`} wide />
-
-        <div className="profile-layout">
-        <div>
-        {p.highlightAsset && (
-          <div className="card love" style={{ marginBottom: '1rem' }}>
-            <h3>Standout asset</h3>
-            <RichText text={p.highlightAsset} />
+        {first && (
+          <div className="borrow-flow">
+            <h2>Things to borrow</h2>
+            <p className="borrow-sub">One practice from {p.parishName} worth copying — the full list is inside.</p>
+            <div className="borrow-item">
+              <div className="borrow-lead">{first.lead}</div>
+              {first.summary && <p>{first.summary}</p>}
+            </div>
           </div>
         )}
-        {p.highlightOpportunity && (
-          <div className="card grow" style={{ marginBottom: '1rem' }}>
-            <h3>Best opportunity</h3>
-            <RichText text={p.highlightOpportunity} />
-            {(() => {
-              const sol = solutionForText(p.highlightOpportunity || '');
-              return sol ? (
-                <p style={{ marginTop: '0.6rem' }}>
-                  <a className="page-link" href={`/solutions/${sol.slug}`}>
-                    Learn more: {sol.title} →
-                  </a>
-                </p>
-              ) : null;
-            })()}
-          </div>
-        )}
+        <LockScreen signedIn={access.signedIn} name={p.parishName} />
+        <VendorCreditLine slug={p.id} />
+      </ProfileShell>
+    );
+  }
 
-        {pages.length > 0 && (
-          <div style={{ marginTop: '2rem' }}>
-            <h2 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>Key pages, up close</h2>
-            <PageRows pages={pages} />
-          </div>
-        )}
+  return (
+    <ProfileShell head={head}>
+      {!p.audited && (
+        <div className="note" style={{ marginBottom: '1rem' }}>
+          This parish is in the ParishVox roster with a verified website. Full audits are
+          drawn from the national stratified sample, diocese by diocese.
         </div>
-        <BorrowSidebar fromName={p.parishName} loveText={p.highlightAsset || ''} gapText={p.highlightOpportunity} />
+      )}
+      {p.highlightAsset && (
+        <div className="card love" style={{ marginBottom: '1rem' }}>
+          <h3>What we love</h3>
+          <RichText text={p.highlightAsset} />
         </div>
-       </div>
-      </div>
-    </section>
+      )}
+      {p.highlightOpportunity && (
+        <div className="card grow" style={{ marginBottom: '1rem' }}>
+          <h3>Where it can grow</h3>
+          <RichText text={p.highlightOpportunity} />
+          {(() => {
+            const sol = solutionForText(p.highlightOpportunity || '');
+            return sol ? (
+              <p style={{ marginTop: '0.6rem' }}>
+                <a className="page-link" href={`/solutions/${sol.slug}`}>
+                  Learn more: {sol.title} →
+                </a>
+              </p>
+            ) : null;
+          })()}
+        </div>
+      )}
+      <BorrowSection
+        fromName={p.parishName}
+        slug={p.id}
+        loveText={p.highlightAsset || ''}
+        gapText={p.highlightOpportunity}
+      />
+      <AuditRequestForm slug={p.id} name={p.parishName} websiteUrl={p.websiteUrl} />
+      <VendorCreditLine slug={p.id} />
+    </ProfileShell>
   );
 }

@@ -1,4 +1,4 @@
-export type UserTier = 'free' | 'starter' | 'team' | 'agency';
+export type UserTier = 'free' | 'starter' | 'team' | 'diocese_plus' | 'agency' | 'platform';
 
 /** The 38 audit dimensions of the ParishVox template, keyed as in the workbook. */
 export interface CathedralDimensions {
