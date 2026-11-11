@@ -70,6 +70,54 @@ export interface PageTeardown {
   invitationNote: string;
 }
 
+/** The 42 audit dimensions of the new-format parish scan (template v2 keys,
+ * minus platform_tier, plus the v2 parish-only keys). Column order in the
+ * ParishDetails sheet tab follows PARISH_DIMENSION_KEYS in sheets.ts. */
+export interface ParishDimensions {
+  welcome_posture: string;
+  audience_balance: string;
+  featured_vs_listed: string;
+  ocia_path: string;
+  sacraments_hub: string;
+  faq_page: string;
+  mass_times_findability: string;
+  confession_adoration_visibility: string;
+  giving_path: string;
+  contact_findability: string;
+  bulletin_freshness: string;
+  bulletin_atomization: string;
+  events_calendar: string;
+  school_attached: string;
+  gospel_rhythm: string;
+  homilies_content: string;
+  digital_faith_life: string;
+  event_promotion: string;
+  event_purpose_named: string;
+  event_next_steps: string;
+  event_identity: string;
+  storytelling: string;
+  photography: string;
+  email_capture: string;
+  copy_voice: string;
+  vocations: string;
+  pastor_visibility: string;
+  livestream_status: string;
+  multilingual: string;
+  visual_identity: string;
+  content_rhythm: string;
+  priest_urgent_need: string;
+  search_function: string;
+  social_integration: string;
+  content_freshness: string;
+  what_we_love: string;
+  areas_of_opportunity: string;
+  cluster_identity: string;
+  digital_home: string;
+  events_presence: string;
+  first_impression: string;
+  invitation_pathways: string;
+}
+
 export interface Parish {
   id: string; // slug: name + city + state
   diocese: string;
@@ -82,7 +130,93 @@ export interface Parish {
   faqScore: string; // Gloriam newcomer-questions score, e.g. "3/7"
   highlightAsset: string;
   highlightOpportunity: string;
+  dimensions?: ParishDimensions; // present for new-format scans (ParishDetails tab)
 }
+
+/** Dimension sections shown on a parish profile's Details tab. */
+export const PARISH_DIMENSION_SECTIONS: { title: string; keys: (keyof ParishDimensions)[] }[] = [
+  {
+    title: 'First Impression & Welcome',
+    keys: ['welcome_posture', 'audience_balance', 'featured_vs_listed', 'first_impression', 'visual_identity', 'photography', 'digital_home'],
+  },
+  {
+    title: 'Becoming Catholic & the Sacraments',
+    keys: ['ocia_path', 'sacraments_hub', 'faq_page', 'invitation_pathways'],
+  },
+  {
+    title: 'Mass, Prayer & the Church Year',
+    keys: ['mass_times_findability', 'confession_adoration_visibility', 'livestream_status', 'gospel_rhythm', 'homilies_content'],
+  },
+  {
+    title: 'Bulletins & Events',
+    keys: ['bulletin_freshness', 'bulletin_atomization', 'events_calendar', 'events_presence', 'event_promotion', 'event_purpose_named', 'event_next_steps', 'event_identity'],
+  },
+  {
+    title: 'Giving, Contact & Care',
+    keys: ['giving_path', 'contact_findability', 'priest_urgent_need', 'email_capture'],
+  },
+  {
+    title: 'Story, Voice & Freshness',
+    keys: ['storytelling', 'digital_faith_life', 'copy_voice', 'content_rhythm', 'content_freshness', 'multilingual'],
+  },
+  {
+    title: 'People, Vocations & Community',
+    keys: ['pastor_visibility', 'vocations', 'school_attached', 'social_integration', 'cluster_identity'],
+  },
+  {
+    title: 'Findability',
+    keys: ['search_function'],
+  },
+  {
+    title: 'In Summary',
+    keys: ['what_we_love', 'areas_of_opportunity'],
+  },
+];
+
+export const PARISH_DIMENSION_LABELS: Record<keyof ParishDimensions, string> = {
+  welcome_posture: 'Welcome posture',
+  audience_balance: 'Audience balance',
+  featured_vs_listed: 'Featured vs. listed',
+  ocia_path: 'Becoming Catholic (OCIA) path',
+  sacraments_hub: 'Sacraments hub',
+  faq_page: 'Newcomer FAQ (Gloriam 0–7)',
+  mass_times_findability: 'Mass times findability',
+  confession_adoration_visibility: 'Confession & adoration visibility',
+  giving_path: 'Giving path',
+  contact_findability: 'Contact findability',
+  bulletin_freshness: 'Bulletin freshness',
+  bulletin_atomization: 'Bulletin atomization',
+  events_calendar: 'Events calendar',
+  school_attached: 'School attached',
+  gospel_rhythm: 'Gospel rhythm',
+  homilies_content: 'Homilies & teaching content',
+  digital_faith_life: 'Digital faith life',
+  event_promotion: 'Event promotion',
+  event_purpose_named: 'Event purpose named',
+  event_next_steps: 'Event next steps',
+  event_identity: 'Event identity',
+  storytelling: 'Storytelling',
+  photography: 'Photography — faces, not facades',
+  email_capture: 'Email capture',
+  copy_voice: 'Copy voice',
+  vocations: 'Vocations',
+  pastor_visibility: 'Pastor visibility',
+  livestream_status: 'Livestream',
+  multilingual: 'Multilingual content',
+  visual_identity: 'Visual identity',
+  content_rhythm: 'Content rhythm',
+  priest_urgent_need: '"I need a priest" path',
+  search_function: 'Site search',
+  social_integration: 'Social integration',
+  content_freshness: 'Content freshness',
+  what_we_love: 'What we love',
+  areas_of_opportunity: 'Where it can grow',
+  cluster_identity: 'Cluster / family identity',
+  digital_home: 'Digital home',
+  events_presence: 'Events presence',
+  first_impression: 'First impression',
+  invitation_pathways: 'Invitation pathways',
+};
 
 export interface Diocese {
   id: string; // slug

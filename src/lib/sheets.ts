@@ -1,4 +1,4 @@
-import { Cathedral, CathedralDimensions, PageTeardown, Parish, Diocese } from './types';
+import { Cathedral, CathedralDimensions, PageTeardown, Parish, ParishDimensions, Diocese } from './types';
 import sampleData from './sample-data.json';
 
 const SHEET_ID = process.env.GOOGLE_SHEET_ID;
@@ -7,6 +7,7 @@ const API_KEY = process.env.GOOGLE_SHEETS_API_KEY;
 const TAB_CATHEDRALS = process.env.SHEET_TAB_CATHEDRALS ?? 'Cathedrals';
 const TAB_PAGES = process.env.SHEET_TAB_PAGES ?? 'Pages';
 const TAB_PARISHES = process.env.SHEET_TAB_PARISHES ?? 'Parishes';
+const TAB_PARISH_DETAILS = process.env.SHEET_TAB_PARISH_DETAILS ?? 'ParishDetails';
 const TAB_DIOCESES = process.env.SHEET_TAB_DIOCESES ?? 'Dioceses';
 
 export const CACHE_REVALIDATE_SECONDS = 900; // 15 minutes so sheet pushes propagate quickly
@@ -155,6 +156,44 @@ export async function fetchAllParishes(): Promise<Parish[]> {
 export async function fetchParishBySlug(slug: string): Promise<Parish | null> {
   const all = await fetchAllParishes();
   return all.find((p) => p.id === slug) ?? null;
+}
+
+/** The 42 new-format dimension keys, in ParishDetails sheet column order
+ * (columns E–AT, after Diocese/Parish/City/State). */
+const PARISH_DIMENSION_KEYS: (keyof ParishDimensions)[] = [
+  'welcome_posture', 'audience_balance', 'featured_vs_listed', 'ocia_path',
+  'sacraments_hub', 'faq_page', 'mass_times_findability',
+  'confession_adoration_visibility', 'giving_path', 'contact_findability',
+  'bulletin_freshness', 'bulletin_atomization', 'events_calendar',
+  'school_attached', 'gospel_rhythm', 'homilies_content', 'digital_faith_life',
+  'event_promotion', 'event_purpose_named', 'event_next_steps', 'event_identity',
+  'storytelling', 'photography', 'email_capture', 'copy_voice', 'vocations',
+  'pastor_visibility', 'livestream_status', 'multilingual', 'visual_identity',
+  'content_rhythm', 'priest_urgent_need', 'search_function', 'social_integration',
+  'content_freshness', 'what_we_love', 'areas_of_opportunity', 'cluster_identity',
+  'digital_home', 'events_presence', 'first_impression', 'invitation_pathways',
+];
+
+/** Dimension-level detail for one parish from the ParishDetails tab.
+ * Returns null for parishes scanned in the old format (highlights only). */
+export async function fetchParishDimensions(
+  parishName: string,
+  city: string,
+  state: string,
+): Promise<ParishDimensions | null> {
+  const rows = await fetchSheet(TAB_PARISH_DETAILS, 'A2:AT');
+  const row = rows.find(
+    (r) =>
+      (r[1] ?? '').trim() === parishName &&
+      (r[2] ?? '').trim() === city &&
+      (r[3] ?? '').trim() === state,
+  );
+  if (!row) return null;
+  const dims = {} as ParishDimensions;
+  PARISH_DIMENSION_KEYS.forEach((k, i) => {
+    dims[k] = (row[4 + i] ?? '').trim();
+  });
+  return PARISH_DIMENSION_KEYS.some((k) => dims[k]) ? dims : null;
 }
 
 function rowToDiocese(row: string[]): Diocese {

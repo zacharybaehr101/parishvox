@@ -3,7 +3,8 @@ import ProfileShell, { LockScreen } from '../../../profile/ProfileHeader';
 import { getServerAccess, hasFullAccess } from '@/lib/access';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import { fetchParishBySlug } from '@/lib/sheets';
+import { fetchParishBySlug, fetchParishDimensions } from '@/lib/sheets';
+import { PARISH_DIMENSION_SECTIONS, PARISH_DIMENSION_LABELS } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
 
@@ -41,8 +42,31 @@ export default async function ParishDetails({ params }: { params: { slug: string
       </ProfileShell>
     );
   }
-  // Parishes carry highlight-level detail today (the dimension-level parish
-  // detail arrives with the new-format scans); show everything that exists.
+  const dims = await fetchParishDimensions(p.parishName, p.city, p.state);
+  if (dims) {
+    // New-format scan: full dimension-by-dimension detail.
+    return (
+      <ProfileShell head={head}>
+        <h2 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>The details</h2>
+        {PARISH_DIMENSION_SECTIONS.map((section) => {
+          const filled = section.keys.filter((k) => dims[k]);
+          if (!filled.length) return null;
+          return (
+            <div key={section.title} className="dim-section">
+              <h2>{section.title}</h2>
+              {filled.map((k) => (
+                <div key={k} className="dim">
+                  <h4>{PARISH_DIMENSION_LABELS[k]}</h4>
+                  <RichText text={dims[k]} />
+                </div>
+              ))}
+            </div>
+          );
+        })}
+      </ProfileShell>
+    );
+  }
+  // Old-format parishes carry highlight-level detail; show everything that exists.
   return (
     <ProfileShell head={head}>
       <h2 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>The details</h2>
