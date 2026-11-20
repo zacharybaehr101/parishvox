@@ -18,7 +18,7 @@ async function fetchSheet(tab: string, range: string): Promise<string[][]> {
   if (!sheetsConfigured) return [];
   const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(`${tab}!${range}`)}?key=${API_KEY}`;
   try {
-    const res = await fetch(url, { next: { revalidate: CACHE_REVALIDATE_SECONDS } });
+    const res = await fetch(url, { cache: 'no-store' });
     if (!res.ok) {
       console.error(`Sheets [${tab}]: ${res.status} — ${await res.text()}`);
       return [];
